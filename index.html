@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Valentine's Surprise for Onthatile</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            text-align: center;
+            background: linear-gradient(to bottom, #ff66b2, #ff99cc, #ff66b2);
+            color: #fff;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+            position: relative;
+        }
+        .container {
+            width: 90%;
+            max-width: 900px;
+            height: 80%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+        #countdown {
+            font-size: 40px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+        #message {
+            font-size: 28px;
+            font-weight: bold;
+            color: #ff0066;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 10px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+            opacity: 0;
+            transition: opacity 1s ease-in-out;
+            position: absolute;
+            z-index: 10;
+            width: 80%;
+            left: 50%;
+            transform: translateX(-50%);
+            bottom: 50%;
+            text-align: center;
+        }
+        #video-container {
+            display: none;
+            position: relative;
+            z-index: 5;
+            width: 100%;
+            max-width: 900px;
+        }
+        #video {
+            width: 100%;
+            height: 500px;
+            border-radius: 10px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+        }
+        .emoji {
+            position: absolute;
+            font-size: 50px;
+            animation: float 5s infinite;
+            z-index: 1;
+        }
+        @keyframes float {
+            0% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-30px);
+            }
+            100% {
+                transform: translateY(0);
+            }
+        }
+        #closing-message {
+            font-size: 20px;
+            font-weight: bold;
+            color: #ff0066;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 10px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+            opacity: 0;
+            transition: opacity 1s ease-in-out;
+            position: absolute;
+            z-index: 10;
+            width: 80%;
+            left: 50%;
+            transform: translateX(-50%);
+            bottom: 20%;
+            text-align: center;
+            display: none;
+        }
+
+        /* Slideshow Styling */
+        #slideshow {
+            display: none;
+            width: 80%;
+            max-width: 900px;
+            margin-top: 20px;
+            border-radius: 10px;
+            overflow: hidden;
+            position: relative;
+        }
+        #slideshow img {
+            width: 100%;
+            height: auto;
+            display: none;
+            border-radius: 10px;
+        }
+
+        /* Media Queries for Smaller Screens */
+        @media (max-width: 768px) {
+            #countdown {
+                font-size: 30px;
+            }
+
+            #message {
+                font-size: 24px;
+                width: 90%;
+            }
+
+            #video {
+                height: 350px;
+            }
+
+            #closing-message {
+                font-size: 18px;
+                width: 90%;
+                padding: 15px;
+                bottom: 10%;
+            }
+
+            #slideshow {
+                width: 90%;
+            }
+        }
+
+        @media (max-width: 480px) {
+            #countdown {
+                font-size: 24px;
+            }
+
+            #message {
+                font-size: 20px;
+                width: 95%;
+            }
+
+            #video {
+                height: 300px;
+            }
+
+            #closing-message {
+                font-size: 16px;
+                width: 95%;
+                padding: 10px;
+                bottom: 10%;
+            }
+
+            #slideshow {
+                width: 95%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div id="countdown">5</div> <!-- Countdown Timer -->
+        <div id="message"></div> <!-- Romantic Message -->
+        <div id="video-container">
+            <video id="video" controls autoplay muted>
+                <source src="video.MP4" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+        </div>
+        <div id="slideshow"> <!-- Slideshow -->
+            <img id="slide1" src="IMG_2306.jpg" alt="photo1">
+            <img id="slide2" src="IMG_3407.jpg" alt="photo2">
+            <img id="slide3" src="IMG_3411.jpg" alt="photo3">
+            <img id="slide4" src="IMG_3410.jpg" alt="photo4">
+            <img id="slide5" src="IMG_3422.jpg" alt="photo5">
+            <!-- Add more images as needed -->
+        </div>
+        <div id="closing-message"></div> <!-- Closing Message -->
+    </div>
+
+    <script>
+        // Countdown Timer
+        let countdownValue = 5;
+        const countdownElement = document.getElementById("countdown");
+        const messageElement = document.getElementById("message");
+        const videoContainer = document.getElementById("video-container");
+        const video = document.getElementById("video");
+        const closingMessage = document.getElementById("closing-message");
+        const slideshow = document.getElementById("slideshow");
+        const slides = slideshow.querySelectorAll("img");
+    
+        // Emojis (Hearts and Kissy Faces) in background
+        function createFloatingEmojis() {
+            const emojis = ['❤️', '💋', '💖', '😍', '🥰', '😘', '💞', '💌', '🌹', '💘', '💓', '💗', '💝', '💋'];
+            const positions = [
+                { top: '10%', left: '5%' }, { top: '5%', left: '45%' }, { top: '10%', left: '85%' },
+                { top: '30%', left: '20%' }, { top: '35%', left: '75%' }, { top: '50%', left: '15%' },
+                { top: '60%', left: '35%' }, { top: '70%', left: '65%' }, { top: '80%', left: '10%' },
+                { top: '55%', left: '60%' }, { top: '25%', left: '40%' }, { top: '40%', left: '80%' },
+                { top: '65%', left: '30%' }, { top: '75%', left: '50%' }
+            ];
+    
+            // Generate a lot of emojis at random positions
+            for (let i = 0; i < 50; i++) {
+                const emoji = document.createElement('div');
+                emoji.classList.add('emoji');
+                emoji.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+                emoji.style.left = `${Math.random() * 100}%`;  // Random horizontal position
+                emoji.style.top = `${Math.random() * 100}%`;   // Random vertical position
+                emoji.style.animationDuration = `${Math.random() * 3 + 3}s`;
+                document.body.appendChild(emoji);
+            }
+        }
+    
+        function startCountdown() {
+            const countdownInterval = setInterval(() => {
+                countdownElement.textContent = countdownValue;
+                countdownValue--;
+                if (countdownValue < 0) {
+                    clearInterval(countdownInterval);
+                    countdownElement.style.display = "none"; // Hide countdown
+                    createFloatingEmojis(); // Show emojis around the center
+                    showMessages(); // Start showing messages
+                }
+            }, 1000);
+        }
+    
+        // Romantic Message with lines appearing one at a time
+        const messages = [
+            "To the love of my life 💖",
+            "You have brought nothing but pure joy into my life 🌟",
+            "You are my world 🌍",
+            "I love you with all my heart and more 💕",
+            "and I'd like to take this moment to celebrate our love 💋"
+        ];
+    
+        function showMessages() {
+            let messageIndex = 0;
+            const messageInterval = setInterval(() => {
+                if (messageIndex < messages.length) {
+                    messageElement.textContent = messages[messageIndex];
+                    messageElement.style.opacity = 1; // Fade in message
+                    messageIndex++;
+                } else {
+                    clearInterval(messageInterval);
+                    setTimeout(removeMessageContainer, 1000); // Wait 1 second before removing the message container
+                    setTimeout(showVideo, 1000); // Wait before showing the video
+                }
+            }, 3000); // 3 seconds for each message
+        }
+    
+        function removeMessageContainer() {
+            messageElement.style.display = "none"; // Hide the message container after the last message
+        }
+    
+        function showVideo() {
+            videoContainer.style.display = "block"; // Show the video container
+            video.volume = 1; // Ensure volume is set to 100%
+            video.play(); // Play the video
+            video.onended = () => {
+                videoContainer.style.display = "none"; // Hide video after it finishes
+                showSlideshow(); // Show the slideshow
+            };
+        }
+    
+        function showSlideshow() {
+            slideshow.style.display = "block"; // Show the slideshow container
+            let currentSlide = 0;
+            slides[currentSlide].style.display = "block"; // Show the first image
+    
+            setInterval(() => {
+                slides[currentSlide].style.display = "none"; // Hide the current image
+                currentSlide = (currentSlide + 1) % slides.length; // Move to the next image
+                slides[currentSlide].style.display = "block"; // Show the next image
+            }, 3000); // 3 seconds for each slide
+    
+            // After all images have been displayed, show the closing message
+            setTimeout(showClosingMessage, 3000 * slides.length);
+        }
+    
+        function showClosingMessage() {
+            closingMessage.textContent = "My dearest Onthatile, \n\nYou are the love that fills my life with light, the reason my heart beats with joy.\nIn every moment we share, I find myself more deeply grateful for your love, your strength, and your unwavering support.\nYou have given me a reason to believe in love and to dream of a future together, one that is filled with laughter, growth, and endless possibilities.\nYour love has given me hope, and with you by my side, I know that no challenge is too great and no distance too far. I promise to always cherish you, to stand by you in every high and low, and to love you beyond measure.\nYou are my heart, my everything. \nHappy Valentines day babbygirl 💖";
+            closingMessage.style.display = "block"; // Show the closing message
+            closingMessage.style.opacity = 1; // Fade in the closing message
+        }
+    
+        // Start the countdown on page load
+        startCountdown();
+    </script>
+    
+</body>
+</html>
